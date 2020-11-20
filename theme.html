@@ -27,11 +27,55 @@
         <link rel="apple-touch-icon-precomposed" href="{PortraitURL-128}">
 
 
+        <!-- CSS STYLING -->
+
+        <!-- normalize.css is CSS reset code that "preserves useful defaults". I'm hoping that using the original github link for now will be okay - when I have this more settled, I should upload this as a theme asset, but for now we'll just do this. --> 
+        <!-- thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
+        <link rel="stylesheet" href="https://github.com/necolas/normalize.css/blob/master/normalize.css" />
+
+        <!-- contains all the CSS for the theme I'm getting from the Build Themes book. will eventually be replaced with my own CSS, once I know more. -->
+        <link rel="stylesheet" href="https://static.tumblr.com/xeccbfq/lT5nwa5y4/theme.css" />
+
+        <style>
+            /* not gonna do this bit yet, gotta wait till later chapters */
+        </style>
+
     </head>
 
-    <body>
+    <body class="{block:IndexPage}is-index-page{/block:IndexPage} {block:PermalinkPage}is-permalink-page{/block:PermalinkPage}">
+    <header class="masthead" role="banner">
+    <-- TODO: Add masthead markup from Chapter 2 -->
+    </header>
 
+    <!-- Search results -->
+    {block:SearchPage}
+    <div class="search-page message">
+    <-- TODO: Add special page markup from Chapter 2 -->
+    </div>
+    {/block:SearchPage}
 
-    </body>
+    {block:TagPage}
+    <div class="tag-page message">
+    <-- TODO: Add special page markup from Chapter 2 -->
+    </div>
+    {/block:TagPage}
+
+    <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
+      {block:Posts}
+      <-- TODO: Add Posts markup from Chapter 2 -->
+      {/block:Posts}
+    </main>
+
+    {block:Pagination}
+    <nav class="pagination">
+      <ul>
+        {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
+        {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
+      </ul>
+    </nav>
+    {/block:Pagination}
+
+    <-- TODO: Add JavaScript from Chapter 4 -->
+  </body>
 
 </html>
