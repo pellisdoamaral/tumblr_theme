@@ -29,42 +29,100 @@
 
         <!-- CSS STYLING -->
 
-        <!-- normalize.css is CSS reset code that "preserves useful defaults". I'm hoping that using the original github link for now will be okay - when I have this more settled, I should upload this as a theme asset, but for now we'll just do this. --> 
+        <!-- normalize.css is CSS reset code that "preserves useful defaults". I'm hoping that using the original github link for now will be okay - when I have enough code to start implementing, I should upload this as a theme asset, but for now we'll just do this. --> 
         <!-- thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
         <link rel="stylesheet" href="https://github.com/necolas/normalize.css/blob/master/normalize.css" />
 
-        <!-- contains all the CSS for the theme I'm getting from the Build Themes book. will eventually be replaced with my own CSS, once I know more. -->
+        <!-- contains all the base CSS for the theme I'm getting from the Build Themes book. will eventually be replaced with my own CSS, once I know more. -->
         <link rel="stylesheet" href="https://static.tumblr.com/xeccbfq/lT5nwa5y4/theme.css" />
 
         <style>
             /* not gonna do this bit yet, gotta wait till later chapters */
+            /* pretty sure that once I do my own base CSS, this is where it'll go, unless I decide to make a stylesheet too */
         </style>
 
     </head>
 
+
+    <!-- WHAT DOES THIS LINE MEAN??? -->
+    <!-- gonna just keep truckin for now, but @ self don't forget to come back and fiddle with this to see what happens -->
     <body class="{block:IndexPage}is-index-page{/block:IndexPage} {block:PermalinkPage}is-permalink-page{/block:PermalinkPage}">
+
+    <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means) -->
     <header class="masthead" role="banner">
-    <-- TODO: Add masthead markup from Chapter 2 -->
-    </header>
+        
+        <!-- I'm not 100% on what a meta wrapper is, but it seems to be a class for blog metadata -->
+        <div class="meta-wrapper">
+
+            <!-- this is about how the avatar is shown, notably whether it's a square or a circle -->
+            {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
+                <img class="portrait global-shape-{AvatarShape}" src="{PortraitURL-128}"/>
+            {/block:ShowAvatar}
+
+            <!-- title & description -->
+            <div class="blog-details">
+                {block:ShowTitle}
+                    <h1 class="blog-title">
+                        <!-- in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
+                        <a href="/" title="{lang:Home}"><{Title}</a>
+                    </h1>
+                {/block:ShowTitle}
+
+                {block:ShowDescription}
+                    {block:Description}
+                        <p class="blog-description">{Description}</p>
+                    {/block:Description}
+                {/block:ShowDescription}
+            </div> <!-- title & description -->
+        </div> <!-- class meta-wrapper -->
+
+        <!-- pages -->
+        <div class="nav-wrapper">
+            <nav> <!-- standard html tag for a block of navigation links -->
+                <ul> <!-- unordered list; list items are <li> -->
+                    {block:HasPages}
+                        {block:Pages}
+                        <li>
+                            <a href="{URL}">{Label}</a>
+                        </li>
+                        {/block:Pages}
+                    {/block:HasPages}
+                    <!-- that's probably where I'd put the code for special /tag/chrono pages -->
+
+                    {block:SubmissionsEnabled}
+                        <li>
+                            <a href="/submit">{SubmitLabel}</a>
+                        </li>
+                    {/block:SubmissionsEnabled}
+
+                    {block:AskEnabled}
+                        <li>
+                            <a href="/ask">{AskLabel}</a>
+                        </li>
+                    {/block:AskEnabled}
+                </ul>
+            </nav>
+        </div> <!-- class nav-wrapper -->
+
+        <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
+        <form action="/search" method="get">
+            <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search"/>
+        </form>
+
+    </header> <!-- masthead -->
 
     <!-- Search results -->
     {block:SearchPage}
     <div class="search-page message">
-    <-- TODO: Add special page markup from Chapter 2 -->
+    <!-- TODO: Add special page markup from Chapter 2 -->
     </div>
     {/block:SearchPage}
 
     {block:TagPage}
     <div class="tag-page message">
-    <-- TODO: Add special page markup from Chapter 2 -->
+    <!-- TODO: Add special page markup from Chapter 2 -->
     </div>
     {/block:TagPage}
-
-    <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
-      {block:Posts}
-      <-- TODO: Add Posts markup from Chapter 2 -->
-      {/block:Posts}
-    </main>
 
     {block:Pagination}
     <nav class="pagination">
@@ -75,7 +133,13 @@
     </nav>
     {/block:Pagination}
 
-    <-- TODO: Add JavaScript from Chapter 4 -->
+    <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
+      {block:Posts}
+      <!-- TODO: Add Posts markup from Chapter 2 -->
+      {/block:Posts}
+    </main>
+
+    <!-- TODO: Add JavaScript from Chapter 4 -->
   </body>
 
 </html>
