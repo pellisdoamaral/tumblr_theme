@@ -29,9 +29,8 @@
 
         <!-- CSS STYLING -->
 
-        <!-- normalize.css is CSS reset code that "preserves useful defaults". I'm hoping that using the original github link for now will be okay - when I have enough code to start implementing, I should upload this as a theme asset, but for now we'll just do this. --> 
-        <!-- thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
-        <link rel="stylesheet" href="https://github.com/necolas/normalize.css/blob/master/normalize.css" />
+        <!-- normalize.css is CSS reset code that "preserves useful defaults". thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
+        <link rel="stylesheet" href="https://static.tumblr.com/rwp7ohk/mXdqk60as/normalize.css" />
 
         <!-- contains all the base CSS for the theme I'm getting from the Build Themes book. will eventually be replaced with my own CSS, once I know more. -->
         <link rel="stylesheet" href="https://static.tumblr.com/xeccbfq/lT5nwa5y4/theme.css" />
@@ -48,10 +47,10 @@
     <!-- gonna just keep truckin for now, but @ self don't forget to come back and fiddle with this to see what happens -->
     <body class="{block:IndexPage}is-index-page{/block:IndexPage} {block:PermalinkPage}is-permalink-page{/block:PermalinkPage}">
 
-    <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means) -->
+    <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means). so any page on the site will contain the masthead. -->
     <header class="masthead" role="banner">
-        
-        <!-- I'm not 100% on what a meta wrapper is, but it seems to be a class for blog metadata -->
+
+        <!-- a class for blog metadata -->
         <div class="meta-wrapper">
 
             <!-- this is about how the avatar is shown, notably whether it's a square or a circle -->
@@ -81,24 +80,25 @@
             <nav> <!-- standard html tag for a block of navigation links -->
                 <ul> <!-- unordered list; list items are <li> -->
                     {block:HasPages}
-                        {block:Pages}
-                        <li>
-                            <a href="{URL}">{Label}</a>
-                        </li>
-                        {/block:Pages}
+                    {block:Pages} <!-- I'm guessing this operates as a for-each -->
+                    <li>
+                        <a href="{URL}">{Label}</a>
+                    </li>
+                    {/block:Pages}
                     {/block:HasPages}
                     <!-- that's probably where I'd put the code for special /tag/chrono pages -->
+                    <!-- actually, if I make a sidebar, I'll probably need a whole class for it, so this will move from the masthead to the sidebar class -->
 
                     {block:SubmissionsEnabled}
-                        <li>
-                            <a href="/submit">{SubmitLabel}</a>
-                        </li>
+                    <li>
+                        <a href="/submit">{SubmitLabel}</a>
+                    </li>
                     {/block:SubmissionsEnabled}
 
                     {block:AskEnabled}
-                        <li>
-                            <a href="/ask">{AskLabel}</a>
-                        </li>
+                    <li>
+                        <a href="/ask">{AskLabel}</a>
+                    </li>
                     {/block:AskEnabled}
                 </ul>
             </nav>
@@ -106,21 +106,32 @@
 
         <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
         <form action="/search" method="get">
-            <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search"/>
+            <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
         </form>
+        <!-- might want to put this in the sidebar too -->
 
     </header> <!-- masthead -->
 
     <!-- Search results -->
     {block:SearchPage}
     <div class="search-page message">
-    <!-- TODO: Add special page markup from Chapter 2 -->
+        {block:SearchResults} <!-- if search results found -->
+        <p class="search-result">{lang:Search results for SearchQuery 2}</p> <!-- @ self: write css for <span class="search-query">, which is how tumblr's displaying the search query in this line -->
+        {/block:SearchResults}
+
+        {block:NoSearchResults} <!-- if no results found -->
+        <p class="search-result">{lang:Sorry no results for SearchQuery 2}</p>
+        {/block:NoSearchResults}
     </div>
     {/block:SearchPage}
 
+    <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? -->
     {block:TagPage}
     <div class="tag-page message">
-    <!-- TODO: Add special page markup from Chapter 2 -->
+        <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p>
+
+        <!-- I believe this creates a horizontal divider across the page, the style of which I can define with css -->
+        <span class="divider"></span>
     </div>
     {/block:TagPage}
 
@@ -133,7 +144,10 @@
     </nav>
     {/block:Pagination}
 
+    <!-- don't know what this means either. 'main' is obvious, but what's with the IndexPage block? @ self come back to it -->
     <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
+
+
       {block:Posts}
       <!-- TODO: Add Posts markup from Chapter 2 -->
       {/block:Posts}
