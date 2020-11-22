@@ -36,8 +36,8 @@
         <link rel="stylesheet" href="https://static.tumblr.com/xeccbfq/lT5nwa5y4/theme.css" />
 
         <style>
-            /* not gonna do this bit yet, gotta wait till later chapters */
-            /* pretty sure that once I do my own base CSS, this is where it'll go, unless I decide to make a stylesheet too */
+            /* might want to put the css in a stylesheet of my own eventually? */
+
         </style>
 
     </head>
@@ -55,16 +55,19 @@
 
             <!-- this is about how the avatar is shown, notably whether it's a square or a circle -->
             {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
-                <img class="portrait global-shape-{AvatarShape}" src="{PortraitURL-128}"/>
+                <img src="{PortraitURL-128}" class="blog-avatar">
+
+                <!-- hiding this because I don't get it <img class="portrait global-shape-{AvatarShape}" src="{PortraitURL-128}"/> -->
             {/block:ShowAvatar}
+
 
             <!-- title & description -->
             <div class="blog-details">
                 {block:ShowTitle}
-                    <h1 class="blog-title">
-                        <!-- in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
+                    <div class="blog-title">
+                        <!-- (no longer) in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
                         <a href="/" title="{lang:Home}"><{Title}</a>
-                    </h1>
+                    </div>
                 {/block:ShowTitle}
 
                 {block:ShowDescription}
@@ -112,7 +115,9 @@
 
     </header> <!-- masthead -->
 
-    <!-- Search results -->
+
+
+    <!-- Search results page-->
     {block:SearchPage}
     <div class="search-page message">
         {block:SearchResults} <!-- if search results found -->
@@ -125,7 +130,8 @@
     </div>
     {/block:SearchPage}
 
-    <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? -->
+    <!-- Tag page -->
+    <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? @ self -->
     {block:TagPage}
     <div class="tag-page message">
         <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p>
@@ -144,13 +150,160 @@
     </nav>
     {/block:Pagination}
 
+
+
     <!-- don't know what this means either. 'main' is obvious, but what's with the IndexPage block? @ self come back to it -->
     <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
 
+        <!-- Here we define all the different post types -->
+        {block:Posts}
+        <!-- an article is a self-contained thing, that could in theory exist without the rest of the site. you'd think that you need one for each KIND of post, but no, those are basically if/else statements. the article here is a single post, of any kind. -->
+        <article>
+            {block:Text}
+            <div class="type-text post-content">
+                {block:Title} <!--if there is a title -->
+                <h2 class="title"> <!-- @ self make sure to style all the header classes (do I need to do the h1/h2/etc?) -->
+                    <a href="{Permalink}">{Title}</a>
+                </h2>
 
-      {block:Posts}
-      <!-- TODO: Add Posts markup from Chapter 2 -->
-      {/block:Posts}
+                {Body} <!-- the content of the post -->
+
+            </div>
+            {/block:Text}
+
+
+            {block:Photo}
+            <figure class="type-photo post-content">
+                <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" -->
+                {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" />{LinkCloseTag} <!-- basically an <a href> -->
+
+                {block:Caption}
+                <figcaption class="caption">
+                    {Caption} 
+                </figcaption>
+                {/block:Caption}
+            </figure>
+            {/block:Photo}
+
+
+            {block:Photoset}
+            <figure class="type-photoset post-content">
+
+                {Photoset} <!-- tumblr manages layout, but @ self you can also do it in code (somewhere) -->
+
+                {block:Caption}
+                <figcaption class="caption">
+                    {Caption} 
+                </figcaption>
+                {/block:Caption}
+            </figure>
+            {/block:Photoset}
+
+
+            {block:Quote}
+            <div class="type-quote post-content">
+
+                <blockquote>{Quote}</blockquote>
+
+                {block:Source}
+                <cite class="caption">
+                    {Source}
+                </cite>
+                {/block:Source}
+            </div>
+            {/block:Quote}
+
+
+            {block:Link}
+            <div class="type-link post-content">
+                <a {Target} href="{URL}" class="link-name">{Name}</a>
+
+                {block:Description}
+                <div class="caption">
+                    {Description}
+                </div>
+                {/block:Description}
+            </div>
+            {/block:Link}
+
+            {block:Chat}
+            <div class="type-chat post-content">
+                {block:Title}<h2 class="title"><a href="{Permalink}">{Title}</a></h2>{/block:Title}
+
+                <ul class="chat-lines">
+                {block:Lines}
+                    <li>
+                    {block:Label}<span class="label">{Label}</span>{/block:Label} {Line}
+                    </li>
+                {/block:Lines}
+                </ul>
+            </div>
+            {/block:Chat}
+
+
+            {block:Audio}
+            <div class="type-audio post-content">
+                {block:AudioEmbed}
+                    {AudioEmbed color="white"}
+                {/block:AudioEmbed}
+
+                {block:AlbumArt}{AlbumArtURL}{/block:AlbumArt}
+                {block:Artist}{Artist}{/block:Artist}
+                {block:Album}{Album}{/block:Album}
+                {block:TrackName}{TrackName}{/block:TrackName}
+
+                {block:Caption}
+                <div class="caption">
+                    {Caption}
+                </div>
+                {/block:Caption}
+            </div>
+            {/block:Audio}
+
+
+            {block:Video}
+            <div class="type-video post-content">
+                {Video-700} <!-- @ self look into this -->
+
+                {block:Caption}
+                <div class="caption">
+                    {Caption}
+                </div>
+                {/block:Caption}
+            </div>
+            {/block:Video}
+
+
+            {block:Answer}
+            <div class="type-answer post-content">
+                <!-- the question that was asked -->
+                <div class="question">
+                    <p class="asker">
+                        <span class="user-name">{Asker}</span>{lang:Asker asked}:
+                    </p>
+
+                    {Question}
+                </div>
+
+                <!-- the answer that was given -->
+                {block:Answerer}
+                <div class="answer">
+                    <p class="answerer">
+                        <span class="user-name">{Answerer}</span>{block:English} answered{/block:English}:
+                    </p>
+                    {Answer}
+                </div>
+                {/block:Answerer}
+
+                <!-- reblogs -->
+                <div class="ask-reblogs">
+                    {Replies}
+                </div>
+            </div>
+            {/block:Answer}
+
+        </article>
+        {/block:Posts}
     </main>
 
     <!-- TODO: Add JavaScript from Chapter 4 -->
