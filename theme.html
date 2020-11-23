@@ -30,9 +30,10 @@
 
 
         <!-- customizable settings that the user can adjust -->
-        <meta name="color:HeaderColor" content="#f4fbfa" />
+        <meta name="color:Header Color" content="#f4fbfa" />
+        <meta name="image:Header Image" />
 
-        <meta name="font:HeaderTitleFont" content="1785 Baskerville" />
+        <meta name="font:Header Title Font" content="1785 Baskerville" />
         <meta name="color:Header Title Color" content=black />
         <meta name="font:Header Description Font" content="1785 Baskerville" />
         <meta name="color:Header Description Color" content=black />
@@ -68,32 +69,48 @@
 
             /* Masthead */
             .masthead {
-                background-color: {color:HeaderColor};
+                background-color: {color:Header Color};
+                background-image: url('{image:Header Image}');
+                background-size: cover;
+                padding: 2em;
+                overflow: auto;
             }
-
+/*
+            .meta-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+*/
+/*            .blog-details {
+                border-style: dotted;
+                float: left;
+            }*/
             .blog-title {
                 text-align: center;
                 font-size: 3em;
-                font-family: {font:HeaderTitleFont};
+                font-family: {font:Header Title Font};
                 color: {color:Header Title Color};
             }
-
             .blog-description {
                 text-align: center;
                 font-family: {font:Header Description Font};
                 color: {color:Header Description Color};
+                padding-right: 1em;
+                padding-left: 1em;
             }
 
             .blog-avatar {
                 float: right;
-                border: 2px blue;
             }
-            .blog-avatar.avatar-style-circle {
+            .avatar-style-circle {
                 border-radius:50%;
             }
-            .blog-avatar.avatar-style-square {
-                border-radius:3%;
+            .avatar-style-square {
+                border-radius:13%;
             }
+
 
             /* Sidebar */ /*
             .sidebar {
@@ -110,325 +127,325 @@
     <!-- @ self don't forget this formatting -->
     <body class="{block:IndexPage}is-index-page{/block:IndexPage} {block:PermalinkPage}is-permalink-page{/block:PermalinkPage}">
 
-    <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means). so any and all page on the site will contain the masthead. -->
-    <header class="masthead" role="banner">
+        <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means). so any and all page on the site will contain the masthead. -->
+        <header class="masthead" role="banner">
 
-        <!-- a class for blog metadata -->
-        <div class="meta-wrapper">
+            <!-- a class for blog metadata -->
+            <div class="meta-wrapper">
 
-            {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
-                <!-- {AvatarShape} will be either circle or square -->
-                <img src="{PortraitURL-128}" class="blog-avatar avatar-style-{AvatarShape}">
-            {/block:ShowAvatar}
+                {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
+                    <!-- {AvatarShape} will be either "circle" or "square" -->
+                    <img src="{PortraitURL-128}" class="blog-avatar avatar-style-{AvatarShape}">
+                {/block:ShowAvatar}
+
+                <!-- title & description -->
+                <div class="blog-details">
+                    {block:ShowTitle}
+                        <h1 class="blog-title">
+                            <!-- (no longer) in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
+                            <a href="/">{Title}</a>
+                        </h1>
+                    {/block:ShowTitle}
+
+                    {block:ShowDescription}
+                        {block:Description}
+                            <p class="blog-description">{Description}</p>
+                        {/block:Description}
+                    {/block:ShowDescription}
+                </div> <!-- title & description -->
+
+            </div> <!-- class meta-wrapper -->
+        </header> <!-- masthead -->
 
 
-            <!-- title & description -->
-            <div class="blog-details">
-                {block:ShowTitle}
-                    <h1 class="blog-title">
-                        <!-- (no longer) in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
-                        <a href="/">{Title}</a>
-                    </h1>
-                {/block:ShowTitle}
+        <aside class="sidebar" role="banner">
+            <!-- pages -->
+            <div class="nav-wrapper">
+                <nav> <!-- standard html tag for a block of navigation links -->
+                    <ul> <!-- unordered list; list items are <li> -->
+                        {block:HasPages}
+                        {block:Pages} <!-- I'm guessing this operates as a for-each -->
+                        <li>
+                            <a href="{URL}">{Label}</a>
+                        </li>
+                        {/block:Pages}
+                        {/block:HasPages}
+                        <!-- that's probably where I'd put the code for special /tag/chrono pages -->
 
-                {block:ShowDescription}
-                    {block:Description}
-                        <p class="blog-description">{Description}</p>
-                    {/block:Description}
-                {/block:ShowDescription}
-            </div> <!-- title & description -->
-        </div> <!-- class meta-wrapper -->
-    </header> <!-- masthead -->
+                        {block:SubmissionsEnabled}
+                        <li>
+                            <a href="/submit">{SubmitLabel}</a>
+                        </li>
+                        {/block:SubmissionsEnabled}
 
+                        {block:AskEnabled}
+                        <li>
+                            <a href="/ask">{AskLabel}</a>
+                        </li>
+                        {/block:AskEnabled}
+                    </ul>
+                </nav>
+            </div> <!-- class nav-wrapper -->
 
-    <aside class="sidebar" role="banner">
-        <!-- pages -->
-        <div class="nav-wrapper">
-            <nav> <!-- standard html tag for a block of navigation links -->
-                <ul> <!-- unordered list; list items are <li> -->
-                    {block:HasPages}
-                    {block:Pages} <!-- I'm guessing this operates as a for-each -->
-                    <li>
-                        <a href="{URL}">{Label}</a>
-                    </li>
-                    {/block:Pages}
-                    {/block:HasPages}
-                    <!-- that's probably where I'd put the code for special /tag/chrono pages -->
+            <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
+            <form action="/search" method="get">
+                <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
+            </form>
 
-                    {block:SubmissionsEnabled}
-                    <li>
-                        <a href="/submit">{SubmitLabel}</a>
-                    </li>
-                    {/block:SubmissionsEnabled}
-
-                    {block:AskEnabled}
-                    <li>
-                        <a href="/ask">{AskLabel}</a>
-                    </li>
-                    {/block:AskEnabled}
-                </ul>
+            {block:Pagination}
+            <nav class="pagination">
+              <ul>
+                {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
+                {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
+              </ul>
             </nav>
-        </div> <!-- class nav-wrapper -->
+            {/block:Pagination}
 
-        <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
-        <form action="/search" method="get">
-            <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
-        </form>
+        <aside> <!-- sidebar -->
+        
 
-        {block:Pagination}
-        <nav class="pagination">
-          <ul>
-            {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
-            {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
-          </ul>
-        </nav>
-        {/block:Pagination}
+        <!-- Search results page-->
+        {block:SearchPage}
+        <div class="search-page message">
+            {block:SearchResults} <!-- if search results found -->
+            <p class="search-result">{lang:Search results for SearchQuery 2}</p> <!-- @ self: write css for <span class="search-query">, which is how tumblr's displaying the search query in this line -->
+            {/block:SearchResults}
 
-    <aside> <!-- sidebar -->
-    
+            {block:NoSearchResults} <!-- if no results found -->
+            <p class="search-result">{lang:Sorry no results for SearchQuery 2}</p>
+            {/block:NoSearchResults}
+        </div>
+        {/block:SearchPage}
 
-    <!-- Search results page-->
-    {block:SearchPage}
-    <div class="search-page message">
-        {block:SearchResults} <!-- if search results found -->
-        <p class="search-result">{lang:Search results for SearchQuery 2}</p> <!-- @ self: write css for <span class="search-query">, which is how tumblr's displaying the search query in this line -->
-        {/block:SearchResults}
+        <!-- Tag page -->
+        <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? @ self -->
+        {block:TagPage}
+        <div class="tag-page message">
+            <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p>
 
-        {block:NoSearchResults} <!-- if no results found -->
-        <p class="search-result">{lang:Sorry no results for SearchQuery 2}</p>
-        {/block:NoSearchResults}
-    </div>
-    {/block:SearchPage}
-
-    <!-- Tag page -->
-    <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? @ self -->
-    {block:TagPage}
-    <div class="tag-page message">
-        <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p>
-
-        <!-- I believe this creates a horizontal divider across the page, the style of which I can define with css -->
-        <span class="divider"></span>
-    </div>
-    {/block:TagPage}
+            <!-- I believe this creates a horizontal divider across the page, the style of which I can define with css -->
+            <span class="divider"></span>
+        </div>
+        {/block:TagPage}
 
 
 
-    <!-- @ self come back to this data-columns business -->
-    <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
+        <!-- @ self come back to this data-columns business -->
+        <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
 
-        <!-- Here we define all the different post types -->
-        {block:Posts}
-        <!-- an article is a self-contained thing, that could in theory exist without the rest of the site. you'd think that you need one for each KIND of post, but no, those are basically if/else statements. the article here is a single post, of any kind. -->
-        <article>
-            {block:Text}
-            <div class="type-text post-content">
-                {block:Title} <!--if there is a title -->
-                <h2 class="title"> <!-- @ self make sure to style all the header classes (do I need to do the h1/h2/etc?) -->
-                    <a href="{Permalink}">{Title}</a>
-                </h2>
+            <!-- Here we define all the different post types -->
+            {block:Posts}
+            <!-- an article is a self-contained thing, that could in theory exist without the rest of the site. you'd think that you need one for each KIND of post, but no, those are basically if/else statements. the article here is a single post, of any kind. -->
+            <article>
+                {block:Text}
+                <div class="type-text post-content">
+                    {block:Title} <!--if there is a title -->
+                    <h2 class="title"> <!-- @ self make sure to style all the header classes (do I need to do the h1/h2/etc?) -->
+                        <a href="{Permalink}">{Title}</a>
+                    </h2>
 
-                {Body} <!-- the content of the post -->
+                    {Body} <!-- the content of the post -->
 
-            </div>
-            {/block:Text}
-
-
-            {block:Photo}
-            <figure class="type-photo post-content">
-                <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" -->
-                {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" />{LinkCloseTag} <!-- basically an <a href> -->
-
-                {block:Caption}
-                <figcaption class="caption">
-                    {Caption} 
-                </figcaption>
-                {/block:Caption}
-            </figure>
-            {/block:Photo}
-
-
-            {block:Photoset}
-            <figure class="type-photoset post-content">
-
-                {Photoset} <!-- tumblr manages layout, but @ self you can also do it in code (somewhere) -->
-
-                {block:Caption}
-                <figcaption class="caption">
-                    {Caption} 
-                </figcaption>
-                {/block:Caption}
-            </figure>
-            {/block:Photoset}
-
-
-            {block:Quote}
-            <div class="type-quote post-content">
-
-                <blockquote>{Quote}</blockquote>
-
-                {block:Source}
-                <cite class="caption">
-                    {Source}
-                </cite>
-                {/block:Source}
-            </div>
-            {/block:Quote}
-
-
-            {block:Link}
-            <div class="type-link post-content">
-                <a {Target} href="{URL}" class="link-name">{Name}</a>
-
-                {block:Description}
-                <div class="caption">
-                    {Description}
                 </div>
-                {/block:Description}
-            </div>
-            {/block:Link}
-
-            {block:Chat}
-            <div class="type-chat post-content">
-                {block:Title}<h2 class="title"><a href="{Permalink}">{Title}</a></h2>{/block:Title}
-
-                <ul class="chat-lines">
-                {block:Lines}
-                    <li>
-                    {block:Label}<span class="label">{Label}</span>{/block:Label} {Line}
-                    </li>
-                {/block:Lines}
-                </ul>
-            </div>
-            {/block:Chat}
+                {/block:Text}
 
 
-            {block:Audio}
-            <div class="type-audio post-content">
-                {block:AudioEmbed}
-                    {AudioEmbed color="white"}
-                {/block:AudioEmbed}
+                {block:Photo}
+                <figure class="type-photo post-content">
+                    <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" -->
+                    {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" />{LinkCloseTag} <!-- basically an <a href> -->
 
-                {block:AlbumArt}{AlbumArtURL}{/block:AlbumArt}
-                {block:Artist}{Artist}{/block:Artist}
-                {block:Album}{Album}{/block:Album}
-                {block:TrackName}{TrackName}{/block:TrackName}
+                    {block:Caption}
+                    <figcaption class="caption">
+                        {Caption} 
+                    </figcaption>
+                    {/block:Caption}
+                </figure>
+                {/block:Photo}
 
-                {block:Caption}
-                <div class="caption">
-                    {Caption}
+
+                {block:Photoset}
+                <figure class="type-photoset post-content">
+
+                    {Photoset} <!-- tumblr manages layout, but @ self you can also do it in code (somewhere) -->
+
+                    {block:Caption}
+                    <figcaption class="caption">
+                        {Caption} 
+                    </figcaption>
+                    {/block:Caption}
+                </figure>
+                {/block:Photoset}
+
+
+                {block:Quote}
+                <div class="type-quote post-content">
+
+                    <blockquote>{Quote}</blockquote>
+
+                    {block:Source}
+                    <cite class="caption">
+                        {Source}
+                    </cite>
+                    {/block:Source}
                 </div>
-                {/block:Caption}
-            </div>
-            {/block:Audio}
+                {/block:Quote}
 
 
-            {block:Video}
-            <div class="type-video post-content">
-                {Video-700} <!-- @ self look into this -->
+                {block:Link}
+                <div class="type-link post-content">
+                    <a {Target} href="{URL}" class="link-name">{Name}</a>
 
-                {block:Caption}
-                <div class="caption">
-                    {Caption}
+                    {block:Description}
+                    <div class="caption">
+                        {Description}
+                    </div>
+                    {/block:Description}
                 </div>
-                {/block:Caption}
-            </div>
-            {/block:Video}
+                {/block:Link}
 
+                {block:Chat}
+                <div class="type-chat post-content">
+                    {block:Title}<h2 class="title"><a href="{Permalink}">{Title}</a></h2>{/block:Title}
 
-            {block:Answer}
-            <div class="type-answer post-content">
-                <!-- the question that was asked -->
-                <div class="question">
-                    <p class="asker">
-                        <span class="user-name">{Asker}</span>{lang:Asker asked}:
-                    </p>
-
-                    {Question}
+                    <ul class="chat-lines">
+                    {block:Lines}
+                        <li>
+                        {block:Label}<span class="label">{Label}</span>{/block:Label} {Line}
+                        </li>
+                    {/block:Lines}
+                    </ul>
                 </div>
+                {/block:Chat}
 
-                <!-- the answer that was given -->
-                {block:Answerer}
-                <div class="answer">
-                    <p class="answerer">
-                        <span class="user-name">{Answerer}</span>{block:English} answered{/block:English}:
-                    </p>
-                    {Answer}
+
+                {block:Audio}
+                <div class="type-audio post-content">
+                    {block:AudioEmbed}
+                        {AudioEmbed color="white"}
+                    {/block:AudioEmbed}
+
+                    {block:AlbumArt}{AlbumArtURL}{/block:AlbumArt}
+                    {block:Artist}{Artist}{/block:Artist}
+                    {block:Album}{Album}{/block:Album}
+                    {block:TrackName}{TrackName}{/block:TrackName}
+
+                    {block:Caption}
+                    <div class="caption">
+                        {Caption}
+                    </div>
+                    {/block:Caption}
                 </div>
-                {/block:Answerer}
+                {/block:Audio}
 
-                <!-- reblogs -->
-                <div class="ask-reblogs">
-                    {Replies}
+
+                {block:Video}
+                <div class="type-video post-content">
+                    {Video-700} <!-- @ self look into this -->
+
+                    {block:Caption}
+                    <div class="caption">
+                        {Caption}
+                    </div>
+                    {/block:Caption}
                 </div>
-            </div>
-            {/block:Answer}
-
-            <!-- post footer; applies to all posts -->
-            <div class="footer" role="content-info">
-
-                <!-- this is where we declare that tags get a # in front of them -->
-                {block:HasTags}
-                <ul class="tags">
-                    {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
-                </ul>
-                {/block:HasTags}
+                {/block:Video}
 
 
-                <!-- the rest of these are all going to be in a line at the bottom of the post -->
-                <!-- it is possible they'll need a div class? or each one will need one? unclear -->
-                {block:Date}
-                <a href="{Permalink}" title="{ShortMonth} {DayOfMonth}{DayOfMonthSuffix} {Year}">
-                    {TimeAgo}
-                </a>
-                {/block:Date}
+                {block:Answer}
+                <div class="type-answer post-content">
+                    <!-- the question that was asked -->
+                    <div class="question">
+                        <p class="asker">
+                            <span class="user-name">{Asker}</span>{lang:Asker asked}:
+                        </p>
 
-                <!-- via -->
-                {block:RebloggedFrom}
-                <a class="reblog-link" href="{ReblogParentURL}">
-                    {ReblogParentName}
-                </a>
-                {/block:RebloggedFrom}
+                        {Question}
+                    </div>
 
-                <!-- source -->
+                    <!-- the answer that was given -->
+                    {block:Answerer}
+                    <div class="answer">
+                        <p class="answerer">
+                            <span class="user-name">{Answerer}</span>{block:English} answered{/block:English}:
+                        </p>
+                        {Answer}
+                    </div>
+                    {/block:Answerer}
 
-                <!-- notes -->
-                {block:NoteCount}
-                <a class="note-count" href="{Permalink}#notes">
-                    {NoteCountWithLabel}
-                </a>
-                {/block:NoteCount}
+                    <!-- reblogs -->
+                    <div class="ask-reblogs">
+                        {Replies}
+                    </div>
+                </div>
+                {/block:Answer}
 
-                <!-- reblog button -->
+                <!-- post footer; applies to all posts -->
+                <div class="footer" role="content-info">
 
-                <!-- like button -->
-
-
-                <!-- special footer for permalink pages - should be instead of the above? somehow? semantically, feels like it should be 'in addition to', but I guess we'll see -->
-                {block:PermalinkPage}
+                    <!-- this is where we declare that tags get a # in front of them -->
                     {block:HasTags}
                     <ul class="tags">
                         {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
                     </ul>
                     {/block:HasTags}
 
-                    {block:PostNotes}
-                    <div class="post-notes">
-                        {PostNotes}
-                    </div>
-                    {/block:PostNotes}
 
-                    <!-- might want to add some more things here, fex a date. maybe also embed links etc? -->
+                    <!-- the rest of these are all going to be in a line at the bottom of the post -->
+                    <!-- it is possible they'll need a div class? or each one will need one? unclear -->
+                    {block:Date}
+                    <a href="{Permalink}" title="{ShortMonth} {DayOfMonth}{DayOfMonthSuffix} {Year}">
+                        {TimeAgo}
+                    </a>
+                    {/block:Date}
 
-                {/block:PermalinkPage}
+                    <!-- via -->
+                    {block:RebloggedFrom}
+                    <a class="reblog-link" href="{ReblogParentURL}">
+                        {ReblogParentName}
+                    </a>
+                    {/block:RebloggedFrom}
+
+                    <!-- source -->
+
+                    <!-- notes -->
+                    {block:NoteCount}
+                    <a class="note-count" href="{Permalink}#notes">
+                        {NoteCountWithLabel}
+                    </a>
+                    {/block:NoteCount}
+
+                    <!-- reblog button -->
+
+                    <!-- like button -->
 
 
-            </div>
+                    <!-- special footer for permalink pages - should be instead of the above? somehow? semantically, feels like it should be 'in addition to', but I guess we'll see -->
+                    {block:PermalinkPage}
+                        {block:HasTags}
+                        <ul class="tags">
+                            {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
 
-        </article>
-        {/block:Posts}
-    </main>
+                        {block:PostNotes}
+                        <div class="post-notes">
+                            {PostNotes}
+                        </div>
+                        {/block:PostNotes}
 
-    <!-- TODO: Add JavaScript from Chapter 4 -->
-  </body>
+                        <!-- might want to add some more things here, fex a date. maybe also embed links etc? -->
+
+                    {/block:PermalinkPage}
+
+
+                </div>
+
+            </article>
+            {/block:Posts}
+        </main>
+
+    <!-- @ self TODO: Add JavaScript from Chapter 4 -->
+    </body>
 
 </html>
