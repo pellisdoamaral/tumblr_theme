@@ -38,6 +38,11 @@
         <style>
             /* might want to put some of this in a stylesheet eventually? */
 
+            /* CSS Navigation: 
+            /* Masthead
+            /* Sidebar
+            /* */
+
             /* Masthead */
             .masthead {
                 border: 5px outset coral;
@@ -60,13 +65,19 @@
                 border-radius:3%;
             }
 
+            /* Sidebar */
+            .sidebar {
+                float:right;
+                background-color: lightgreen;
+            }
+
+
         </style>
 
     </head>
 
 
-    <!-- WHAT DOES THIS LINE MEAN??? -->
-    <!-- I get it now :D -->
+    <!-- @ self don't forget this formatting -->
     <body class="{block:IndexPage}is-index-page{/block:IndexPage} {block:PermalinkPage}is-permalink-page{/block:PermalinkPage}">
 
     <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means). so any and all page on the site will contain the masthead. -->
@@ -75,11 +86,9 @@
         <!-- a class for blog metadata -->
         <div class="meta-wrapper">
 
-            <!-- this is about how the avatar is shown, notably whether it's a square or a circle -->
             {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
+                <!-- {AvatarShape} will be either circle or square -->
                 <img src="{PortraitURL-128}" class="blog-avatar avatar-style-{AvatarShape}">
-
-                <!-- hiding this because I don't get it <img class="portrait global-shape-{AvatarShape}" src="{PortraitURL-128}"/> -->
             {/block:ShowAvatar}
 
 
@@ -100,6 +109,7 @@
             </div> <!-- title & description -->
         </div> <!-- class meta-wrapper -->
     </header> <!-- masthead -->
+
 
     <aside class="sidebar" role="banner">
         <!-- pages -->
@@ -135,10 +145,17 @@
             <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
         </form>
 
+        {block:Pagination}
+        <nav class="pagination">
+          <ul>
+            {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
+            {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
+          </ul>
+        </nav>
+        {/block:Pagination}
+
     <aside> <!-- sidebar -->
     
-
-
 
     <!-- Search results page-->
     {block:SearchPage}
@@ -164,18 +181,9 @@
     </div>
     {/block:TagPage}
 
-    {block:Pagination}
-    <nav class="pagination">
-      <ul>
-        {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
-        {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
-      </ul>
-    </nav>
-    {/block:Pagination}
 
 
-
-    <!-- don't know what this means either. 'main' is obvious, but what's with the IndexPage block? @ self come back to it -->
+    <!-- @ self come back to this data-columns business -->
     <main role="main" {block:IndexPage}data-columns{/block:IndexPage}>
 
         <!-- Here we define all the different post types -->
@@ -324,6 +332,67 @@
                 </div>
             </div>
             {/block:Answer}
+
+            <!-- post footer; applies to all posts -->
+            <div class="footer" role="content-info">
+
+                <!-- this is where we declare that tags get a # in front of them -->
+                {block:HasTags}
+                <ul class="tags">
+                    {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
+                </ul>
+                {/block:HasTags}
+
+
+                <!-- the rest of these are all going to be in a line at the bottom of the post -->
+                <!-- it is possible they'll need a div class? or each one will need one? unclear -->
+                {block:Date}
+                <a href="{Permalink}" title="{ShortMonth} {DayOfMonth}{DayOfMonthSuffix} {Year}">
+                    {TimeAgo}
+                </a>
+                {/block:Date}
+
+                <!-- via -->
+                {block:RebloggedFrom}
+                <a class="reblog-link" href="{ReblogParentURL}">
+                    {ReblogParentName}
+                </a>
+                {/block:RebloggedFrom}
+
+                <!-- source -->
+
+                <!-- notes -->
+                {block:NoteCount}
+                <a class="note-count" href="{Permalink}#notes">
+                    {NoteCountWithLabel}
+                </a>
+                {/block:NoteCount}
+
+                <!-- reblog button -->
+
+                <!-- like button -->
+
+
+                <!-- special footer for permalink pages - should be instead of the above? somehow? semantically, feels like it should be 'in addition to', but I guess we'll see -->
+                {block:PermalinkPage}
+                    {block:HasTags}
+                    <ul class="tags">
+                        {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
+                    </ul>
+                    {/block:HasTags}
+
+                    {block:PostNotes}
+                    <div class="post-notes">
+                        {PostNotes}
+                    </div>
+                    {/block:PostNotes}
+
+                    <!-- might want to add some more things here, fex a date. maybe also embed links etc? -->
+
+                {/block:PermalinkPage}
+
+
+            </div>
 
         </article>
         {/block:Posts}
