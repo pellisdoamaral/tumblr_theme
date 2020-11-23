@@ -27,6 +27,20 @@
         <link rel="apple-touch-icon-precomposed" href="{PortraitURL-128}">
 
 
+
+
+        <!-- customizable settings that the user can adjust -->
+        <meta name="color:HeaderColor" content="#f4fbfa" />
+
+        <meta name="font:HeaderTitleFont" content="1785 Baskerville" />
+        <meta name="color:Header Title Color" content=black />
+        <meta name="font:Header Description Font" content="1785 Baskerville" />
+        <meta name="color:Header Description Color" content=black />
+
+
+
+
+
         <!-- CSS STYLING -->
 
         <!-- normalize.css is CSS reset code that "preserves useful defaults". thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
@@ -39,19 +53,35 @@
             /* might want to put some of this in a stylesheet eventually? */
 
             /* CSS Navigation: 
+            /* General styling
             /* Masthead
             /* Sidebar
             /* */
 
+
+            /* General styling */
+            a {
+                text-decoration: none; /* links no longer have underlines by default */
+                color: inherit; /* links no longer go blue by default */
+            } 
+
+
             /* Masthead */
             .masthead {
-                border: 5px outset coral;
-                background-color: lightblue;
+                background-color: {color:HeaderColor};
             }
 
             .blog-title {
                 text-align: center;
                 font-size: 3em;
+                font-family: {font:HeaderTitleFont};
+                color: {color:Header Title Color};
+            }
+
+            .blog-description {
+                text-align: center;
+                font-family: {font:Header Description Font};
+                color: {color:Header Description Color};
             }
 
             .blog-avatar {
@@ -65,12 +95,12 @@
                 border-radius:3%;
             }
 
-            /* Sidebar */
+            /* Sidebar */ /*
             .sidebar {
                 float:right;
                 background-color: lightgreen;
             }
-
+            */
 
         </style>
 
