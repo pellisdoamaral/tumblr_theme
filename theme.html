@@ -103,6 +103,7 @@
 
             .blog-avatar {
                 float: right;
+                padding-left: 1em;
             }
             .avatar-style-circle {
                 border-radius:50%;
@@ -134,8 +135,10 @@
             <div class="meta-wrapper">
 
                 {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
+                <div class="blog-avatar">    
                     <!-- {AvatarShape} will be either "circle" or "square" -->
-                    <img src="{PortraitURL-128}" class="blog-avatar avatar-style-{AvatarShape}">
+                    <img src="{PortraitURL-128}" class="avatar-style-{AvatarShape}">
+                </div>
                 {/block:ShowAvatar}
 
                 <!-- title & description -->
