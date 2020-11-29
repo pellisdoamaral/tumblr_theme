@@ -30,14 +30,21 @@
 
 
         <!-- customizable settings that the user can adjust -->
-        <meta name="color:Header Color" content="#89ebf6" />
+
+        <!-- header -->
+        <meta name="color:Header Color" content="#2f6b2b" />
         <meta name="image:Header Image" />
 
         <meta name="font:Header Title Font" content="Garamond" />
-        <meta name="color:Header Title Color" content=black />
+        <meta name="color:Header Title Color" content="white" />
         <meta name="font:Header Description Font" content="Garamond" />
-        <meta name="color:Header Description Color" content=black />
+        <meta name="color:Header Description Color" content="white" />
 
+        <!-- sidebar -->
+        <meta name="color:Sidebar Color" content="#b4eb8a" />
+
+        <meta name="font:Sidebar Font" content="Garamond" />
+        <meta name="color:Sidebar Font Color" content="#1d361f" />
 
 
 
@@ -116,7 +123,6 @@
             /* this is the container for the sidebar + main (the actual contents of a given page). it's here in the Sidebar category because I only need this container so the sidebar can be labeled 'position: absolute; */
             .blog-container {
                 position: relative;
-                box-sizing: border-box;
                 overflow: hidden;
             }
 
@@ -128,8 +134,9 @@
 
                 width: 25%;
 
-                background: lightgreen;
-                color: black;
+                background: {color:Sidebar Color};
+                font-family: {font:Sidebar Font};
+                color: {color:Sidebar Font Color};
             }
 
 
