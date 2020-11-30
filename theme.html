@@ -46,6 +46,39 @@
         <meta name="font:Sidebar Font" content="Garamond" />
         <meta name="color:Sidebar Font Color" content="#1d361f" />
 
+        <meta name="if:Show About" content="1" />
+        <meta name="text:About" content="" />
+
+        <meta name="if:Show Links" content="1" />
+        <meta name="text:Links Title" content="" />
+
+        <meta name="if:Show Pages" content="1" />
+        <meta name="text:Pages Title" content="Pages" />
+
+        <meta name="if:Show Stories" content="1" />
+        <meta name="text:Stories Title" content="Story Tags" />
+
+        <meta name="text:Ao3 Link" content="" />
+        <meta name="text:Link 1" content="" />
+        <meta name="text:Link 1 Name" content="" />
+        <meta name="text:Link 2" content="" />
+        <meta name="text:Link 2 Name" content="" />
+        <meta name="text:Link 3" content="" />
+        <meta name="text:Link 3 Name" content="" />
+
+        <meta name="text:Story 1" content="" />
+        <meta name="text:Story 1 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 2" content="" />
+        <meta name="text:Story 2 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 3" content="" />
+        <meta name="text:Story 3 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 4" content="" />
+        <meta name="text:Story 4 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 5" content="" />
+        <meta name="text:Story 5 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 6" content="" />
+        <meta name="text:Story 6 Tag with hyphens instead of spaces" content="" />
+
 
 
 
@@ -81,21 +114,30 @@
                 font-size: 100%; 
             }
 
+            ul {
+                list-style: none; /* no bullets */
+                padding-left: 0; /* no margin */
+            }
+
+            h1 {} /* used for blog title, I'm pretty sure, @self don't forget */
+            h2 {} /* used for the sidebar box titles, @self don't forget */
+
 
             /* Masthead */
             .masthead {
                 background-color: {color:Header Color};
                 background-image: url('{image:Header Image}');
                 background-size: cover;
-                padding: 2em;
+                /*padding: 2em;*/
                 overflow: auto;
             }
 
             .blog-title {
                 text-align: center;
-                font-size: 3em;
+                font-size: 4em;
                 font-family: {font:Header Title Font};
                 color: {color:Header Title Color};
+                padding-top: .1em;
             }
             .blog-description {
                 text-align: center;
@@ -108,7 +150,9 @@
 
             .blog-avatar {
                 float: right;
-                padding-left: 1em;
+                right: 1%;
+
+                padding: 1em;
             }
             .avatar-style-circle {
                 border-radius:50%;
@@ -116,6 +160,7 @@
             .avatar-style-square {
                 border-radius:13%;
             }
+
 
 
             /* Sidebar */ 
@@ -131,6 +176,7 @@
                 top: 0;
                 right: 0;
                 bottom: 0;
+                overflow:auto;
 
                 width: 25%;
 
@@ -138,6 +184,11 @@
                 font-family: {font:Sidebar Font};
                 color: {color:Sidebar Font Color};
             }
+
+            .sidebar-box {
+                padding: 4% 10% 0;
+            }
+
 
 
 
@@ -160,40 +211,113 @@
         <!-- the masthead is for stuff that affects the whole site, not just specific (types of) pages. (that's what role="banner" means). so any and all page on the site will contain the masthead. -->
         <header class="masthead" role="banner">
 
-            <!-- a class for blog metadata -->
-            <div class="meta-wrapper">
+            {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
+            <div class="blog-avatar">    
+                <!-- {AvatarShape} will be either "circle" or "square" -->
+                <img src="{PortraitURL-128}" class="avatar-style-{AvatarShape}">
+            </div>
+            {/block:ShowAvatar}
 
-                {block:ShowAvatar} <!-- pretty sure this is basically an if statement ("if show avatar") -->
-                <div class="blog-avatar">    
-                    <!-- {AvatarShape} will be either "circle" or "square" -->
-                    <img src="{PortraitURL-128}" class="avatar-style-{AvatarShape}">
-                </div>
-                {/block:ShowAvatar}
+            <!-- title & description -->
+            <div class="blog-details">
+                {block:ShowTitle}
+                    <h1 class="blog-title">
+                        <!-- in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
+                        <a href="/">{Title}</a>
+                    </h1>
+                {/block:ShowTitle}
 
-                <!-- title & description -->
-                <div class="blog-details">
-                    {block:ShowTitle}
-                        <h1 class="blog-title">
-                            <!-- (no longer) in a header font (h1), show the title ({Title}) as a link to the home page ("/{lang:Home}") -->
-                            <a href="/">{Title}</a>
-                        </h1>
-                    {/block:ShowTitle}
+                {block:ShowDescription}
+                    {block:Description}
+                        <p class="blog-description">{Description}</p>
+                    {/block:Description}
+                {/block:ShowDescription}
+            </div> <!-- title & description -->
 
-                    {block:ShowDescription}
-                        {block:Description}
-                            <p class="blog-description">{Description}</p>
-                        {/block:Description}
-                    {/block:ShowDescription}
-                </div> <!-- title & description -->
-
-            </div> <!-- class meta-wrapper -->
         </header> <!-- masthead -->
 
 
-        <div class="blog-container"> <!-- contains sidebar and main page space, with posts and all -->
+        <div class="blog-container"> <!-- contains sidebar and main page space, with posts and all that -->
+            
             <aside class="sidebar" role="banner">
-                <!-- pages -->
-                <div class="nav-wrapper">
+
+                {block:IfShowAbout}
+                <div id="about" class="sidebar-box">
+                    <h2>About</h2>
+                    <p>{text:About}</p>
+                </div> <!-- about -->
+                {/block:IfShowAbout}
+
+                {block:IfShowLinks}
+                <div id="link-list" class="sidebar-box">
+                    <h2>{text:Links Title}</h2>
+
+                    <!-- unfortunately, we have to do all of these one by one. it's ugly, but c'est la vie -->
+                    {block:IfAo3Link}
+                    <p><a href="{text:Ao3 Link}">Ao3</a></p>
+                    {/block:IfAo3Link}
+
+                    {block:IfLink1Name}
+                    <p><a href="{text:Link 1}">{text:Link 1 Name}</a></p>
+                    {/block:IfLink1Name}
+
+                    {block:IfLink2Name}
+                    <p><a href="{text:Link 2}">{text:Link 2 Name}</a></p>
+                    {/block:IfLink2Name}
+
+                    {block:IfLink3Name}
+                    <p><a href="{text:Link 3}">{text:Link 3 Name}</a></p>
+                    {/block:IfLink3Name}
+
+
+                    {block:AskEnabled}
+                        <p><a href="/ask">{AskLabel}</a></p>
+                    {/block:AskEnabled}
+
+                    {block:SubmissionsEnabled}
+                        <p><a href="/submit">{SubmitLabel}</a></p>
+                    {/block:SubmissionsEnabled}
+                </div> <!-- ask, submit, and links -->
+                {/block:IfShowLinks}
+
+
+                {block:IfShowStories}
+                <div id="story-list" class="sidebar-box">
+                    <h2>{text:Stories Title}</h2>
+
+                    <!-- once more unto the breach, my friends -->
+
+                    {block:IfStory1}
+                    <p><a href="/tagged/{text:Story 1 Tag with hyphens instead of spaces}/chrono">{text:Story 1}</a></p>
+                    {/block:IfStory1}
+
+                    {block:IfStory2}
+                    <p><a href="{/tagged/{text:Story 2 Tag with hyphens instead of spaces}/chrono}">{text:Story 2}</a></p>
+                    {/block:IfStory2}
+
+                    {block:IfStory3}
+                    <p><a href="{/tagged/{text:Story 3 Tag with hyphens instead of spaces}/chrono}">{text:Story 3}</a></p>
+                    {/block:IfStory3}
+
+                    {block:IfStory4}
+                    <p><a href="{/tagged/{text:Story 4 Tag with hyphens instead of spaces}/chrono}">{text:Story 4}</a></p>
+                    {/block:IfStory4}
+
+                    {block:IfStory5}
+                    <p><a href="{/tagged/{text:Story 5 Tag with hyphens instead of spaces}/chrono}">{text:Story 5}</a></p>
+                    {/block:IfStory5}
+
+                    {block:IfStory6}
+                    <p><a href="{/tagged/{text:Story 6 Tag with hyphens instead of spaces}/chrono">{text:Story 6}</a></p>
+                    {/block:IfStory6}
+
+                </div>
+                {/block:IfShowStories}
+
+
+                {block:IfShowPages}
+                <div id="page-list" class="sidebar-box">
+                    <h2>{text:Pages Title}</h2>
                     <nav> <!-- standard html tag for a block of navigation links -->
                         <ul> <!-- unordered list; list items are <li> -->
                             {block:HasPages}
@@ -203,27 +327,18 @@
                             </li>
                             {/block:Pages}
                             {/block:HasPages}
-                            <!-- that's probably where I'd put the code for special /tag/chrono pages -->
-
-                            {block:SubmissionsEnabled}
-                            <li>
-                                <a href="/submit">{SubmitLabel}</a>
-                            </li>
-                            {/block:SubmissionsEnabled}
-
-                            {block:AskEnabled}
-                            <li>
-                                <a href="/ask">{AskLabel}</a>
-                            </li>
-                            {/block:AskEnabled}
                         </ul>
                     </nav>
-                </div> <!-- class nav-wrapper -->
+                </div> <!-- class page-list -->
+                {/block:IfShowPages}
 
-                <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
-                <form action="/search" method="get">
-                    <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
-                </form>
+
+                <div id="search-bar" class="sidebar-box">
+                    <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
+                    <form action="/search" method="get">
+                        <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
+                    </form>
+                </div> <!-- search bar -->
 
                 {block:Pagination}
                 <nav class="pagination">
