@@ -67,17 +67,17 @@
         <meta name="text:Link 3 Name" content="" />
 
         <meta name="text:Story 1" content="" />
-        <meta name="text:Story 1 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 1 Tag" content="" />
         <meta name="text:Story 2" content="" />
-        <meta name="text:Story 2 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 2 Tag" content="" />
         <meta name="text:Story 3" content="" />
-        <meta name="text:Story 3 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 3 Tag" content="" />
         <meta name="text:Story 4" content="" />
-        <meta name="text:Story 4 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 4 Tag" content="" />
         <meta name="text:Story 5" content="" />
-        <meta name="text:Story 5 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 5 Tag" content="" />
         <meta name="text:Story 6" content="" />
-        <meta name="text:Story 6 Tag with hyphens instead of spaces" content="" />
+        <meta name="text:Story 6 Tag" content="" />
 
 
 
@@ -288,27 +288,27 @@
                     <!-- once more unto the breach, my friends -->
 
                     {block:IfStory1}
-                    <p><a href="/tagged/{text:Story 1 Tag with hyphens instead of spaces}/chrono">{text:Story 1}</a></p>
+                    <p><a href="/tagged/{text:Story 1 Tag}/chrono">{text:Story 1}</a></p>
                     {/block:IfStory1}
 
                     {block:IfStory2}
-                    <p><a href="{/tagged/{text:Story 2 Tag with hyphens instead of spaces}/chrono}">{text:Story 2}</a></p>
+                    <p><a href="/tagged/{text:Story 2 Tag}/chrono">{text:Story 2}</a></p>
                     {/block:IfStory2}
 
                     {block:IfStory3}
-                    <p><a href="{/tagged/{text:Story 3 Tag with hyphens instead of spaces}/chrono}">{text:Story 3}</a></p>
+                    <p><a href="/tagged/{text:Story 3 Tag}/chrono">{text:Story 3}</a></p>
                     {/block:IfStory3}
 
                     {block:IfStory4}
-                    <p><a href="{/tagged/{text:Story 4 Tag with hyphens instead of spaces}/chrono}">{text:Story 4}</a></p>
+                    <p><a href="/tagged/{text:Story 4 Tag}/chrono">{text:Story 4}</a></p>
                     {/block:IfStory4}
 
                     {block:IfStory5}
-                    <p><a href="{/tagged/{text:Story 5 Tag with hyphens instead of spaces}/chrono}">{text:Story 5}</a></p>
+                    <p><a href="/tagged/{text:Story 5 Tag}/chrono">{text:Story 5}</a></p>
                     {/block:IfStory5}
 
                     {block:IfStory6}
-                    <p><a href="{/tagged/{text:Story 6 Tag with hyphens instead of spaces}/chrono">{text:Story 6}</a></p>
+                    <p><a href="/tagged/{text:Story 6 Tag}/chrono">{text:Story 6}</a></p>
                     {/block:IfStory6}
 
                 </div>
@@ -340,10 +340,15 @@
                     </form>
                 </div> <!-- search bar -->
 
+
                 {block:Pagination}
-                <nav class="pagination">
+                <nav id="pagination" class="sidebar-box"> <!-- @ self come back to style this later -->
                   <ul>
                     {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
+                    {block:JumpPagination length="5"}
+                        {block:CurrentPage}<span class="current-page">{PageNumber}</span>{/block:CurrentPage}
+                        {block:JumpPage}<a class="jump-page" href="{URL}">{PageNumber}</a>{/block:JumpPage}
+                    {/block:JumpPagination}
                     {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
                   </ul>
                 </nav>
@@ -400,7 +405,7 @@
 
                     {block:Photo}
                     <figure class="type-photo post-content">
-                        <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" -->
+                        <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" (hey @self look into this) -->
                         {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" />{LinkCloseTag} <!-- basically an <a href> -->
 
                         {block:Caption}
