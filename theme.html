@@ -336,21 +336,24 @@
                 <div id="search-bar" class="sidebar-box">
                     <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
                     <form action="/search" method="get">
-                        <input type="text" name="query" value="{SearchQuery}" placeholder="{lang:Search}"/>
+                        <!-- note that you gotta set name="q" or tumblr won't know what to do with this -->
+                        <input type="text" name="q" value="{SearchQuery}" placeholder="{lang:Search}"/> <!-- search bar -->
+                        <!-- <input type="submit" value="Search" class="search-button"/> <-- search button -->
                     </form>
                 </div> <!-- search bar -->
 
 
+
+
+
                 {block:Pagination}
                 <nav id="pagination" class="sidebar-box"> <!-- @ self come back to style this later -->
-                  <ul>
-                    {block:PreviousPage}<li><a href="{PreviousPage}">{lang:Previous}</a></li>{/block:PreviousPage}
+                    {block:PreviousPage}<a href="{PreviousPage}"><</a>{/block:PreviousPage}
                     {block:JumpPagination length="5"}
                         {block:CurrentPage}<span class="current-page">{PageNumber}</span>{/block:CurrentPage}
                         {block:JumpPage}<a class="jump-page" href="{URL}">{PageNumber}</a>{/block:JumpPage}
                     {/block:JumpPagination}
-                    {block:NextPage}<li><a href="{NextPage}">{lang:Next}</a></li>{/block:NextPage}
-                  </ul>
+                    {block:NextPage}<a href="{NextPage}">></a>{/block:NextPage}
                 </nav>
                 {/block:Pagination}
 
@@ -374,7 +377,7 @@
             <!-- this is only shown if the tag exists; if not, you get a 'url not found' message. can I make a 'tag not used' page instead? @ self -->
             {block:TagPage}
             <div class="tag-page message">
-                <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p>
+                <p class="tag-wrapper">{lang:Showing posts tagged Tag 2}</p> <!-- @self style this -->
 
                 <!-- I believe this creates a horizontal divider across the page, the style of which I can define with css -->
                 <span class="divider"></span>
