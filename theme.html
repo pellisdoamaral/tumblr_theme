@@ -36,9 +36,9 @@
         <meta name="image:Header Image" />
 
         <meta name="font:Header Title Font" content="Garamond" />
-        <meta name="color:Header Title Color" content="white" />
+        <meta name="color:Header Title Color" content="#e7f6d9" />
         <meta name="font:Header Description Font" content="Garamond" />
-        <meta name="color:Header Description Color" content="white" />
+        <meta name="color:Header Description Color" content="#e7f6d9" />
 
         <!-- sidebar -->
         <meta name="color:Sidebar Color" content="#b4eb8a" />
@@ -47,7 +47,7 @@
         <meta name="color:Sidebar Font Color" content="#1d361f" />
 
         <meta name="if:Show About" content="1" />
-        <meta name="text:About" content="" />
+        <meta name="text:About" content="About text yadda yadda ya hey hi hiyo hey" />
 
         <meta name="if:Show Links" content="1" />
         <meta name="text:Links Title" content="" />
@@ -58,16 +58,17 @@
         <meta name="if:Show Stories" content="1" />
         <meta name="text:Stories Title" content="Story Tags" />
 
-        <meta name="text:Ao3 Link" content="" />
-        <meta name="text:Link 1" content="" />
+        <meta name="text:Ao3 Link" content="https://archiveofourown.org" />
+        <meta name="text:Wattpad Link" content="https://wattpad.com" />
         <meta name="text:Link 1 Name" content="" />
-        <meta name="text:Link 2" content="" />
+        <meta name="text:Link 1" content="" />
         <meta name="text:Link 2 Name" content="" />
-        <meta name="text:Link 3" content="" />
+        <meta name="text:Link 2" content="" />
         <meta name="text:Link 3 Name" content="" />
+        <meta name="text:Link 3" content="" />
 
-        <meta name="text:Story 1" content="" />
-        <meta name="text:Story 1 Tag" content="" />
+        <meta name="text:Story 1" content="a tale of two chats" />
+        <meta name="text:Story 1 Tag" content="chat chat" />
         <meta name="text:Story 2" content="" />
         <meta name="text:Story 2 Tag" content="" />
         <meta name="text:Story 3" content="" />
@@ -121,6 +122,12 @@
 
             h1 {} /* used for blog title, I'm pretty sure, @self don't forget */
             h2 {} /* used for the sidebar box titles, @self don't forget */
+            h3 { /* used for the post titles */
+                text-align: center;
+                font-size: 2em;
+            }
+
+            blockquote {}
 
 
             /* Masthead */
@@ -151,7 +158,6 @@
             .blog-avatar {
                 float: right;
                 right: 1%;
-
                 padding: 1em;
             }
             .avatar-style-circle {
@@ -178,7 +184,7 @@
                 bottom: 0;
                 overflow:auto;
 
-                width: 25%;
+                width: 20%;
 
                 background: {color:Sidebar Color};
                 font-family: {font:Sidebar Font};
@@ -189,14 +195,31 @@
                 padding: 4% 10% 0;
             }
 
+            #pagination {
+                text-align: center;
+            }
+
+            .current-page, .jump-page, .prev-page, .next-page {
+                padding: 0 .5em;
+            }
+
 
 
 
             /* Posts */
-            .post-container {
-                width: 70%;
-                margin: 100px;
-                color: blue;
+            .post-container { /* contains the main part of the page, where all the posts are */
+                width: 80%;
+                margin: 0;
+                background: #203a08;
+                overflow: auto;
+            }
+
+            .post-box {
+                padding: 1em;
+                margin: 2em;
+                background: #e7f6d9;
+                color: #2c6a3b;
+
             }
 
 
@@ -256,6 +279,10 @@
                     {block:IfAo3Link}
                     <p><a href="{text:Ao3 Link}">Ao3</a></p>
                     {/block:IfAo3Link}
+
+                    {block:IfWattpadLink}
+                    <p><a href="{text:Wattpad Link}">Wattpad</a></p>
+                    {/block:IfWattpadLink}
 
                     {block:IfLink1Name}
                     <p><a href="{text:Link 1}">{text:Link 1 Name}</a></p>
@@ -333,7 +360,7 @@
                 {/block:IfShowPages}
 
 
-                <div id="search-bar" class="sidebar-box">
+                <div id="search-bar" class="sidebar-box"> <!-- @self fix the width of this thing -->
                     <!-- this creates the search bar! <form> is for a user-input interface, in this case of type 'text' -->
                     <form action="/search" method="get">
                         <!-- note that you gotta set name="q" or tumblr won't know what to do with this -->
@@ -343,22 +370,21 @@
                 </div> <!-- search bar -->
 
 
-
-
-
                 {block:Pagination}
-                <nav id="pagination" class="sidebar-box"> <!-- @ self come back to style this later -->
-                    {block:PreviousPage}<a href="{PreviousPage}"><</a>{/block:PreviousPage}
+                <nav id="pagination" class="sidebar-box"> <!-- @ self do we want a separate color for the current page? -->
+                    {block:PreviousPage}<a class="prev-page" href="{PreviousPage}"><</a>{/block:PreviousPage}
                     {block:JumpPagination length="5"}
                         {block:CurrentPage}<span class="current-page">{PageNumber}</span>{/block:CurrentPage}
                         {block:JumpPage}<a class="jump-page" href="{URL}">{PageNumber}</a>{/block:JumpPage}
                     {/block:JumpPagination}
-                    {block:NextPage}<a href="{NextPage}">></a>{/block:NextPage}
+                    {block:NextPage}<a class="next-page" href="{NextPage}">></a>{/block:NextPage}
                 </nav>
                 {/block:Pagination}
 
             </aside> <!-- sidebar -->
             
+
+
 
             <!-- Search results page-->
             {block:SearchPage}
@@ -391,150 +417,21 @@
 
                 <!-- Here we define all the different post types -->
                 {block:Posts}
-                <!-- an article is a self-contained thing, that could in theory exist without the rest of the site. you'd think that you need one for each KIND of post, but no, those are basically if/else statements. the article here is a single post, of any kind. -->
-                <article>
+                <!-- an article is a self-contained thing, that could in theory exist without the rest of the site. you'd think that you need one for each KIND of post, but no, those are basically if/else statements. the article in question here is any single post, of any kind. -->
+                <article class="post-box">
+
                     {block:Text}
-                    <div class="type-text post-content">
-                        {block:Title} <!--if there is a title -->
-                        <h2 class="title"> <!-- @ self make sure to style all the header classes (do I need to do the h1/h2/etc?) -->
-                            <a href="{Permalink}">{Title}</a>
-                        </h2>
+                    <div class="post-content type-text">
+                        {block:Title}
+                            <h3><a href="{Permalink}">{Title}</a></h3>
+                        {/block:Title}
 
-                        {Body} <!-- the content of the post -->
-
+                        {Body}
                     </div>
                     {/block:Text}
 
+                    
 
-                    {block:Photo}
-                    <figure class="type-photo post-content">
-                        <!-- link to high-res version of photo; PhotoAlt is the "HTML-safe version of the caption (if one exists)" (hey @self look into this) -->
-                        {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" />{LinkCloseTag} <!-- basically an <a href> -->
-
-                        {block:Caption}
-                        <figcaption class="caption">
-                            {Caption} 
-                        </figcaption>
-                        {/block:Caption}
-                    </figure>
-                    {/block:Photo}
-
-
-                    {block:Photoset}
-                    <figure class="type-photoset post-content">
-
-                        {Photoset} <!-- tumblr manages layout, but @ self you can also do it in code (somewhere) -->
-
-                        {block:Caption}
-                        <figcaption class="caption">
-                            {Caption} 
-                        </figcaption>
-                        {/block:Caption}
-                    </figure>
-                    {/block:Photoset}
-
-
-                    {block:Quote}
-                    <div class="type-quote post-content">
-
-                        <blockquote>{Quote}</blockquote>
-
-                        {block:Source}
-                        <cite class="caption">
-                            {Source}
-                        </cite>
-                        {/block:Source}
-                    </div>
-                    {/block:Quote}
-
-
-                    {block:Link}
-                    <div class="type-link post-content">
-                        <a {Target} href="{URL}" class="link-name">{Name}</a>
-
-                        {block:Description}
-                        <div class="caption">
-                            {Description}
-                        </div>
-                        {/block:Description}
-                    </div>
-                    {/block:Link}
-
-                    {block:Chat}
-                    <div class="type-chat post-content">
-                        {block:Title}<h2 class="title"><a href="{Permalink}">{Title}</a></h2>{/block:Title}
-
-                        <ul class="chat-lines">
-                        {block:Lines}
-                            <li>
-                            {block:Label}<span class="label">{Label}</span>{/block:Label} {Line}
-                            </li>
-                        {/block:Lines}
-                        </ul>
-                    </div>
-                    {/block:Chat}
-
-
-                    {block:Audio}
-                    <div class="type-audio post-content">
-                        {block:AudioEmbed}
-                            {AudioEmbed color="white"}
-                        {/block:AudioEmbed}
-
-                        {block:AlbumArt}{AlbumArtURL}{/block:AlbumArt}
-                        {block:Artist}{Artist}{/block:Artist}
-                        {block:Album}{Album}{/block:Album}
-                        {block:TrackName}{TrackName}{/block:TrackName}
-
-                        {block:Caption}
-                        <div class="caption">
-                            {Caption}
-                        </div>
-                        {/block:Caption}
-                    </div>
-                    {/block:Audio}
-
-
-                    {block:Video}
-                    <div class="type-video post-content">
-                        {Video-700} <!-- @ self look into this -->
-
-                        {block:Caption}
-                        <div class="caption">
-                            {Caption}
-                        </div>
-                        {/block:Caption}
-                    </div>
-                    {/block:Video}
-
-
-                    {block:Answer}
-                    <div class="type-answer post-content">
-                        <!-- the question that was asked -->
-                        <div class="question">
-                            <p class="asker">
-                                <span class="user-name">{Asker}</span>{lang:Asker asked}:
-                            </p>
-
-                            {Question}
-                        </div>
-
-                        <!-- the answer that was given -->
-                        {block:Answerer}
-                        <div class="answer">
-                            <p class="answerer">
-                                <span class="user-name">{Answerer}</span>{block:English} answered{/block:English}:
-                            </p>
-                            {Answer}
-                        </div>
-                        {/block:Answerer}
-
-                        <!-- reblogs -->
-                        <div class="ask-reblogs">
-                            {Replies}
-                        </div>
-                    </div>
-                    {/block:Answer}
 
                     <!-- post footer; applies to all posts -->
                     <div class="footer" role="content-info">
@@ -558,7 +455,7 @@
                         <!-- via -->
                         {block:RebloggedFrom}
                         <a class="reblog-link" href="{ReblogParentURL}">
-                            {ReblogParentName}
+                            via {ReblogParentName}
                         </a>
                         {/block:RebloggedFrom}
 
@@ -571,18 +468,13 @@
                         </a>
                         {/block:NoteCount}
 
-                        <!-- reblog button -->
+                        <!-- reblog button @self -->
 
-                        <!-- like button -->
+                        <!-- like button @self -->
 
 
-                        <!-- special footer for permalink pages - should be instead of the above? somehow? semantically, feels like it should be 'in addition to', but I guess we'll see -->
+                        <!-- special footer for permalink pages - basically just for extended notes -->
                         {block:PermalinkPage}
-                            {block:HasTags}
-                            <ul class="tags">
-                                {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
-                            </ul>
-                            {/block:HasTags}
 
                             {block:PostNotes}
                             <div class="post-notes">
@@ -590,7 +482,7 @@
                             </div>
                             {/block:PostNotes}
 
-                            <!-- might want to add some more things here, fex a date. maybe also embed links etc? -->
+                            <!-- might want to add some more things here, fex embed links etc? -->
 
                         {/block:PermalinkPage}
 
