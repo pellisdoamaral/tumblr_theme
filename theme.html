@@ -32,19 +32,27 @@
         <!-- customizable settings that the user can adjust -->
 
         <!-- header -->
-        <meta name="color:Header Color" content="#2f6b2b" />
+        <meta name="color:Header Color" content="#004280" />
         <meta name="image:Header Image" />
 
         <meta name="font:Header Title Font" content="Garamond" />
-        <meta name="color:Header Title Color" content="#e7f6d9" />
+        <meta name="color:Header Title Color" content="#b3daff" />
         <meta name="font:Header Description Font" content="Garamond" />
-        <meta name="color:Header Description Color" content="#e7f6d9" />
+        <meta name="color:Header Description Color" content="#b3daff" />
+
+
+        <!-- posts/gen -->
+        <meta name="color:Blog Background" content="#5e81a2" />
+        <meta name="color:Post Background" content="#b3daff" />
+        <meta name="color:Post Text" content="#004280" />
+        <meta name="font:Post Title" content="Garamond" />
+
 
         <!-- sidebar -->
-        <meta name="color:Sidebar Color" content="#b4eb8a" />
+        <meta name="color:Sidebar Color" content="#b3daff" />
 
         <meta name="font:Sidebar Font" content="Garamond" />
-        <meta name="color:Sidebar Font Color" content="#1d361f" />
+        <meta name="color:Sidebar Text Color" content="#004280" />
 
         <meta name="if:Show About" content="1" />
         <meta name="text:About" content="About text yadda yadda ya hey hi hiyo hey" />
@@ -88,9 +96,6 @@
         <!-- normalize.css is CSS reset code that "preserves useful defaults". thanks and credit to Nicolas Gallagher for this file. it is released under an MIT license. -->
         <link rel="stylesheet" href="https://static.tumblr.com/rwp7ohk/mXdqk60as/normalize.css" />
 
-        <!-- contains all the base CSS for the theme I'm getting from the Build Themes book. will eventually be replaced with my own CSS, once I know more. -->
-        <!--<link rel="stylesheet" href="https://static.tumblr.com/xeccbfq/lT5nwa5y4/theme.css" /> -->
-
         <style>
             /* might want to put some of this in a stylesheet eventually? */
 
@@ -112,12 +117,7 @@
 
             body {
                 /* sets base font size to (basically) 12pt. all other font units are in em, so they scale relative to this */
-                font-size: 100%; 
-            }
-
-            ul {
-                list-style: none; /* no bullets */
-                padding-left: 0; /* no margin */
+                font-size: 110%; 
             }
 
             h1 {} /* used for blog title, I'm pretty sure, @self don't forget */
@@ -125,9 +125,24 @@
             h3 { /* used for the post titles */
                 text-align: center;
                 font-size: 2em;
+                font-family: {font:Post Title};
+                margin-bottom: 0;
             }
 
-            blockquote {}
+            blockquote {
+                border-left: 4px solid {color:Post Text};
+                padding-left: 10px;
+                margin: 0 .5em;
+            }
+
+            hr { /* used for the post title underlines */
+                height: 3px;
+                width: 80%;
+                text-align: center;
+                margin-bottom: 2em;
+                border: none;
+                background-image: linear-gradient(to right, transparent, {color:Post Text}, transparent);
+            }
 
 
             /* Masthead */
@@ -143,6 +158,7 @@
                 text-align: center;
                 font-size: 4em;
                 font-family: {font:Header Title Font};
+                font-weight: bold; /* @self make a decision here */
                 color: {color:Header Title Color};
                 padding-top: .1em;
             }
@@ -188,7 +204,7 @@
 
                 background: {color:Sidebar Color};
                 font-family: {font:Sidebar Font};
-                color: {color:Sidebar Font Color};
+                color: {color:Sidebar Text Color};
             }
 
             .sidebar-box {
@@ -210,16 +226,42 @@
             .post-container { /* contains the main part of the page, where all the posts are */
                 width: 80%;
                 margin: 0;
-                background: #203a08;
+                background: {color:Blog Background};
                 overflow: auto;
             }
 
             .post-box {
                 padding: 1em;
                 margin: 2em;
-                background: #e7f6d9;
-                color: #2c6a3b;
+                background: {color:Post Background};
+                color: {color:Post Text};
 
+            }
+
+            .reblog-username {
+                font-style: italic;
+            }
+            .active {
+                text-decoration: underline;
+            }
+
+            .reblog-body {
+                border-left: 4px solid {color:Post Text};
+                padding-left: 10px;
+                margin: 0 .5em;
+            }
+
+
+            /* Post Footer */
+            .tags {
+                margin-bottom: .5em;
+            }
+            .each-tag {
+                margin-right: .5em;
+            }
+
+            .footer-buttons {
+                font-size: .9em;
             }
 
 
@@ -346,15 +388,11 @@
                 <div id="page-list" class="sidebar-box">
                     <h2>{text:Pages Title}</h2>
                     <nav> <!-- standard html tag for a block of navigation links -->
-                        <ul> <!-- unordered list; list items are <li> -->
-                            {block:HasPages}
-                            {block:Pages} <!-- I'm guessing this operates as a for-each -->
-                            <li>
-                                <a href="{URL}">{Label}</a>
-                            </li>
-                            {/block:Pages}
-                            {/block:HasPages}
-                        </ul>
+                        {block:HasPages}
+                        {block:Pages} <!-- I'm guessing this operates as a for-each -->
+                            <p><a href="{URL}">{Label}</a></p>
+                        {/block:Pages}
+                        {/block:HasPages}
                     </nav>
                 </div> <!-- class page-list -->
                 {/block:IfShowPages}
@@ -424,9 +462,32 @@
                     <div class="post-content type-text">
                         {block:Title}
                             <h3><a href="{Permalink}">{Title}</a></h3>
+                            <hr>
                         {/block:Title}
 
-                        {Body}
+                        <!-- if this is an original post, just show it normally -->
+                        {block:NotReblog}
+                            <div class="body-text">{Body}</div>
+                        {/block:NotReblog}
+
+                        <!-- if this is a reblogged post, well, time to get funky -->
+                        {block:RebloggedFrom}
+                        <div class="reblog-list">
+                            {block:Reblogs} <!--for each entry in the reblog list -->
+                            <div class="reblog">
+                                {block:IsActive}
+                                    <a target="_blank" class="active reblog-username" href="{Permalink}">{Username}</a>:
+                                {/block:IsActive}
+                                {block:IsDeactivated}
+                                    <span class="inactive reblog-username">{Username}:</span>
+                                {/block:IsDeactivated}
+
+                                <div class="reblog-body body-text">{Body}</div>
+                            </div>
+                            {/block:Reblogs}
+                        </div>
+                        {/block:RebloggedFrom}
+
                     </div>
                     {/block:Text}
 
@@ -438,39 +499,39 @@
 
                         <!-- this is where we declare that tags get a # in front of them -->
                         {block:HasTags}
-                        <ul class="tags">
-                            {block:Tags}<li><a href="{TagURL}">#{Tag}</a></li>{/block:Tags}
-                        </ul>
+                        <div class="tags">
+                            {block:Tags}<a class="each-tag" href="{TagURL}">#{Tag}</a>{/block:Tags}
+                        </div>
                         {/block:HasTags}
 
 
                         <!-- the rest of these are all going to be in a line at the bottom of the post -->
-                        <!-- it is possible they'll need a div class? or each one will need one? unclear -->
-                        {block:Date}
-                        <a href="{Permalink}" title="{ShortMonth} {DayOfMonth}{DayOfMonthSuffix} {Year}">
-                            {TimeAgo}
-                        </a>
-                        {/block:Date}
+                        <div class="footer-buttons">
+                            {block:Date}
+                            <a href="{Permalink}" title="{TimeAgo}">
+                                {ShortMonth} {DayOfMonth}{DayOfMonthSuffix} {Year}
+                            </a>
+                            {/block:Date}
 
-                        <!-- via -->
-                        {block:RebloggedFrom}
-                        <a class="reblog-link" href="{ReblogParentURL}">
-                            via {ReblogParentName}
-                        </a>
-                        {/block:RebloggedFrom}
+                            <!-- via/source -->
+                            {block:RebloggedFrom}
+                            <a class="reblog-link" href="{ReblogParentURL}">via</a>
+                            /
+                            <a class="reblog-link" href="{ReblogRootURL}">source</a>
+                            {/block:RebloggedFrom}
 
-                        <!-- source -->
+                            <!-- notes -->
+                            {block:NoteCount}
+                            <a class="note-count" href="{Permalink}#notes">
+                                {NoteCountWithLabel}
+                            </a>
+                            {/block:NoteCount}
 
-                        <!-- notes -->
-                        {block:NoteCount}
-                        <a class="note-count" href="{Permalink}#notes">
-                            {NoteCountWithLabel}
-                        </a>
-                        {/block:NoteCount}
+                            <!-- reblog button @self -->
 
-                        <!-- reblog button @self -->
+                            <!-- like button @self -->
 
-                        <!-- like button @self -->
+                        </div> <!-- footer buttons -->
 
 
                         <!-- special footer for permalink pages - basically just for extended notes -->
@@ -482,7 +543,7 @@
                             </div>
                             {/block:PostNotes}
 
-                            <!-- might want to add some more things here, fex embed links etc? -->
+                            <!-- might want to add some more things here, fex embed links etc? @self -->
 
                         {/block:PermalinkPage}
 
@@ -491,7 +552,7 @@
 
                 </article>
                 {/block:Posts}
-            </main>
+            </main> <!-- post-container -->
 
         </div> <!-- blog-container -->
 
